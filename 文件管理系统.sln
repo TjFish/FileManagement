@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.645
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "文件管理系统", "文件管理系统\文件管理系统.vcxproj", "{931F1443-32D1-4CE4-BADA-677A2BB1780F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{931F1443-32D1-4CE4-BADA-677A2BB1780F}.Debug|x64.ActiveCfg = Debug|x64
+		{931F1443-32D1-4CE4-BADA-677A2BB1780F}.Debug|x64.Build.0 = Debug|x64
+		{931F1443-32D1-4CE4-BADA-677A2BB1780F}.Debug|x86.ActiveCfg = Debug|Win32
+		{931F1443-32D1-4CE4-BADA-677A2BB1780F}.Debug|x86.Build.0 = Debug|Win32
+		{931F1443-32D1-4CE4-BADA-677A2BB1780F}.Release|x64.ActiveCfg = Release|x64
+		{931F1443-32D1-4CE4-BADA-677A2BB1780F}.Release|x64.Build.0 = Release|x64
+		{931F1443-32D1-4CE4-BADA-677A2BB1780F}.Release|x86.ActiveCfg = Release|Win32
+		{931F1443-32D1-4CE4-BADA-677A2BB1780F}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CA0379BD-DFDB-483C-99A8-63128E0E13A6}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,101 @@
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(391,5): warning MSB8028: 中间目录(Debug\)包含从另一个项目(文件管理系统.vcxproj)共享的文件。   这会导致错误的清除和重新生成行为。
+  bitmap.cpp
+c:\users\oy\source\repos\文件管理系统\文件管理系统\fs.h(30): warning C4005: “S_IFMT”: 宏重定义
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\sys\stat.h(121): note: 参见“S_IFMT”的前一个定义
+c:\users\oy\source\repos\文件管理系统\文件管理系统\fs.h(31): warning C4005: “S_IFREG”: 宏重定义
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\sys\stat.h(124): note: 参见“S_IFREG”的前一个定义
+c:\users\oy\source\repos\文件管理系统\文件管理系统\fs.h(33): warning C4005: “S_IFDIR”: 宏重定义
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\sys\stat.h(122): note: 参见“S_IFDIR”的前一个定义
+c:\users\oy\source\repos\文件管理系统\文件管理系统\fs.h(34): warning C4005: “S_IFCHR”: 宏重定义
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\sys\stat.h(123): note: 参见“S_IFCHR”的前一个定义
+  disk.cpp
+c:\users\oy\source\repos\文件管理系统\文件管理系统\fs.h(30): warning C4005: “S_IFMT”: 宏重定义
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\sys\stat.h(121): note: 参见“S_IFMT”的前一个定义
+c:\users\oy\source\repos\文件管理系统\文件管理系统\fs.h(31): warning C4005: “S_IFREG”: 宏重定义
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\sys\stat.h(124): note: 参见“S_IFREG”的前一个定义
+c:\users\oy\source\repos\文件管理系统\文件管理系统\fs.h(33): warning C4005: “S_IFDIR”: 宏重定义
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\sys\stat.h(122): note: 参见“S_IFDIR”的前一个定义
+c:\users\oy\source\repos\文件管理系统\文件管理系统\fs.h(34): warning C4005: “S_IFCHR”: 宏重定义
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\sys\stat.h(123): note: 参见“S_IFCHR”的前一个定义
+  file.cpp
+c:\users\oy\source\repos\文件管理系统\文件管理系统\fs.h(30): warning C4005: “S_IFMT”: 宏重定义
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\sys\stat.h(121): note: 参见“S_IFMT”的前一个定义
+c:\users\oy\source\repos\文件管理系统\文件管理系统\fs.h(31): warning C4005: “S_IFREG”: 宏重定义
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\sys\stat.h(124): note: 参见“S_IFREG”的前一个定义
+c:\users\oy\source\repos\文件管理系统\文件管理系统\fs.h(33): warning C4005: “S_IFDIR”: 宏重定义
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\sys\stat.h(122): note: 参见“S_IFDIR”的前一个定义
+c:\users\oy\source\repos\文件管理系统\文件管理系统\fs.h(34): warning C4005: “S_IFCHR”: 宏重定义
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\sys\stat.h(123): note: 参见“S_IFCHR”的前一个定义
+c:\users\oy\source\repos\文件管理系统\文件管理系统\file.cpp(142): warning C4018: “>”: 有符号/无符号不匹配
+  inode.cpp
+c:\users\oy\source\repos\文件管理系统\文件管理系统\fs.h(30): warning C4005: “S_IFMT”: 宏重定义
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\sys\stat.h(121): note: 参见“S_IFMT”的前一个定义
+c:\users\oy\source\repos\文件管理系统\文件管理系统\fs.h(31): warning C4005: “S_IFREG”: 宏重定义
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\sys\stat.h(124): note: 参见“S_IFREG”的前一个定义
+c:\users\oy\source\repos\文件管理系统\文件管理系统\fs.h(33): warning C4005: “S_IFDIR”: 宏重定义
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\sys\stat.h(122): note: 参见“S_IFDIR”的前一个定义
+c:\users\oy\source\repos\文件管理系统\文件管理系统\fs.h(34): warning C4005: “S_IFCHR”: 宏重定义
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\sys\stat.h(123): note: 参见“S_IFCHR”的前一个定义
+  main.cpp
+c:\users\oy\source\repos\文件管理系统\文件管理系统\fs.h(30): warning C4005: “S_IFMT”: 宏重定义
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\sys\stat.h(121): note: 参见“S_IFMT”的前一个定义
+c:\users\oy\source\repos\文件管理系统\文件管理系统\fs.h(31): warning C4005: “S_IFREG”: 宏重定义
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\sys\stat.h(124): note: 参见“S_IFREG”的前一个定义
+c:\users\oy\source\repos\文件管理系统\文件管理系统\fs.h(33): warning C4005: “S_IFDIR”: 宏重定义
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\sys\stat.h(122): note: 参见“S_IFDIR”的前一个定义
+c:\users\oy\source\repos\文件管理系统\文件管理系统\fs.h(34): warning C4005: “S_IFCHR”: 宏重定义
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\sys\stat.h(123): note: 参见“S_IFCHR”的前一个定义
+c:\users\oy\source\repos\文件管理系统\文件管理系统\main.cpp(46): warning C4554: “&”: 检查运算符优先级是否存在的可能的错误；使用括号阐明优先级
+  namei.cpp
+c:\users\oy\source\repos\文件管理系统\文件管理系统\fs.h(30): warning C4005: “S_IFMT”: 宏重定义
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\sys\stat.h(121): note: 参见“S_IFMT”的前一个定义
+c:\users\oy\source\repos\文件管理系统\文件管理系统\fs.h(31): warning C4005: “S_IFREG”: 宏重定义
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\sys\stat.h(124): note: 参见“S_IFREG”的前一个定义
+c:\users\oy\source\repos\文件管理系统\文件管理系统\fs.h(33): warning C4005: “S_IFDIR”: 宏重定义
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\sys\stat.h(122): note: 参见“S_IFDIR”的前一个定义
+c:\users\oy\source\repos\文件管理系统\文件管理系统\fs.h(34): warning C4005: “S_IFCHR”: 宏重定义
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\sys\stat.h(123): note: 参见“S_IFCHR”的前一个定义
+c:\users\oy\source\repos\文件管理系统\文件管理系统\namei.cpp(331): warning C4244: “return”: 从“time_t”转换到“unsigned long”，可能丢失数据
+  super.cpp
+c:\users\oy\source\repos\文件管理系统\文件管理系统\fs.h(30): warning C4005: “S_IFMT”: 宏重定义
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\sys\stat.h(121): note: 参见“S_IFMT”的前一个定义
+c:\users\oy\source\repos\文件管理系统\文件管理系统\fs.h(31): warning C4005: “S_IFREG”: 宏重定义
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\sys\stat.h(124): note: 参见“S_IFREG”的前一个定义
+c:\users\oy\source\repos\文件管理系统\文件管理系统\fs.h(33): warning C4005: “S_IFDIR”: 宏重定义
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\sys\stat.h(122): note: 参见“S_IFDIR”的前一个定义
+c:\users\oy\source\repos\文件管理系统\文件管理系统\fs.h(34): warning C4005: “S_IFCHR”: 宏重定义
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\sys\stat.h(123): note: 参见“S_IFCHR”的前一个定义
+  sys.cpp
+c:\users\oy\source\repos\文件管理系统\文件管理系统\fs.h(30): warning C4005: “S_IFMT”: 宏重定义
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\sys\stat.h(121): note: 参见“S_IFMT”的前一个定义
+c:\users\oy\source\repos\文件管理系统\文件管理系统\fs.h(31): warning C4005: “S_IFREG”: 宏重定义
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\sys\stat.h(124): note: 参见“S_IFREG”的前一个定义
+c:\users\oy\source\repos\文件管理系统\文件管理系统\fs.h(33): warning C4005: “S_IFDIR”: 宏重定义
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\sys\stat.h(122): note: 参见“S_IFDIR”的前一个定义
+c:\users\oy\source\repos\文件管理系统\文件管理系统\fs.h(34): warning C4005: “S_IFCHR”: 宏重定义
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\sys\stat.h(123): note: 参见“S_IFCHR”的前一个定义
+c:\users\oy\source\repos\文件管理系统\文件管理系统\sys.cpp(95): warning C4018: “>”: 有符号/无符号不匹配
+c:\users\oy\source\repos\文件管理系统\文件管理系统\sys.cpp(339): warning C4101: “size”: 未引用的局部变量
+  truncate.cpp
+c:\users\oy\source\repos\文件管理系统\文件管理系统\fs.h(30): warning C4005: “S_IFMT”: 宏重定义
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\sys\stat.h(121): note: 参见“S_IFMT”的前一个定义
+c:\users\oy\source\repos\文件管理系统\文件管理系统\fs.h(31): warning C4005: “S_IFREG”: 宏重定义
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\sys\stat.h(124): note: 参见“S_IFREG”的前一个定义
+c:\users\oy\source\repos\文件管理系统\文件管理系统\fs.h(33): warning C4005: “S_IFDIR”: 宏重定义
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\sys\stat.h(122): note: 参见“S_IFDIR”的前一个定义
+c:\users\oy\source\repos\文件管理系统\文件管理系统\fs.h(34): warning C4005: “S_IFCHR”: 宏重定义
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\sys\stat.h(123): note: 参见“S_IFCHR”的前一个定义
+  正在生成代码...
+c:\users\oy\source\repos\文件管理系统\文件管理系统\sys.cpp(236): warning C4715: “cmd_ls”: 不是所有的控件路径都返回值
+LINK : warning LNK4075: 忽略“/INCREMENTAL”(由于“/FORCE”规范)
+sys.obj : warning LNK4006: "int __cdecl pdirc(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (?pdirc@@YAHV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z) 已在 main.obj 中定义；已忽略第二个定义
+sys.obj : warning LNK4006: "int __cdecl perrorc(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (?perrorc@@YAHV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z) 已在 main.obj 中定义；已忽略第二个定义
+sys.obj : warning LNK4006: "int __cdecl pfilec(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (?pfilec@@YAHV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z) 已在 main.obj 中定义；已忽略第二个定义
+sys.obj : warning LNK4006: "int __cdecl pinfoc(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (?pinfoc@@YAHV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z) 已在 main.obj 中定义；已忽略第二个定义
+sys.obj : warning LNK4006: "int __cdecl ppathc(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (?ppathc@@YAHV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z) 已在 main.obj 中定义；已忽略第二个定义
+sys.obj : warning LNK4006: "int __cdecl printfc(enum _ForeColor,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >,...)" (?printfc@@YAHW4_ForeColor@@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@ZZ) 已在 main.obj 中定义；已忽略第二个定义
+sys.obj : warning LNK4006: "int __cdecl printfc(enum _ForeColor,enum _BackColor,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >,...)" (?printfc@@YAHW4_ForeColor@@W4_BackColor@@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@ZZ) 已在 main.obj 中定义；已忽略第二个定义
+sys.obj : warning LNK4006: "int __cdecl pstatc(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (?pstatc@@YAHV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z) 已在 main.obj 中定义；已忽略第二个定义
+sys.obj : warning LNK4006: "int __cdecl psucc(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (?psucc@@YAHV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z) 已在 main.obj 中定义；已忽略第二个定义
+C:\Users\OY\source\repos\文件管理系统\Debug\FileManagement.exe : warning LNK4088: 因 /FORCE 选项生成了映像；映像可能不能运行
+  文件管理系统.vcxproj -> C:\Users\OY\source\repos\文件管理系统\Debug\FileManagement.exe
