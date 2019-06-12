@@ -13,7 +13,7 @@
 
 ## 项目概述
 
-本项目是基于MINIX1.0 的文件管理系统。主要借鉴了linux0.11的源码，去掉了linux0.11中的多进程，内存管理等模块，目标是能够真正的操作磁盘文件。
+本项目是基于MINIX1.0 的文件管理系统。主要借鉴了linux0.11的源码，参考赵炯编编著的《linux内核完全注释》。去掉了linux0.11中的多进程，内存管理等模块，目标是能够真正的操作磁盘文件。
 基于c++的控制台，实现了linux的基本文件操作命令，包括ls，cd，mkdir，rm，vi等等命令，同时提供基本文件接口，包括sys_open,sys_close,sys_read,sys_write,sys_lseek等系统调用。
 **/文件管理系统/** 目录下的hdc0.11.img 是一个MINIX文件格式的磁盘文件，下面其在ubuntu装载的显示root目录结构。
 
@@ -29,6 +29,7 @@
 ## MINIX1.0文件系统
 
 linux0.11采用的是MINIX 1.0文件系统。MINIX 1.0 文件系统与标准 UNIX 的文件系统基本相同。它由6个部分组成。对于一个360K的盘，其各部分的分布如下图所示。
+( 图片来自《linux内核完全注释》)
 
 ![image](./image/总体结构.png)
 
@@ -127,6 +128,7 @@ linux0.11 中实现的文件类型较多而且比较复杂，本项目做了简�
 
 1. **file**
     下面是file类的具体结构
+
     ```c
     struct file {
 	unsigned short f_mode;
@@ -136,6 +138,7 @@ linux0.11 中实现的文件类型较多而且比较复杂，本项目做了简�
 	off_t f_pos;
     };
     ```
+
     其中f_mode表示文件类型，f_flags 表示文件属性，f_count表示有文件的打开次数
     f_pos 表示文件指针，指向文件现在的读写位置。用户(程序员）可以通过sys_lseak系统调用来修改文件指针的位置。
 
@@ -150,12 +153,14 @@ linux0.11 中实现的文件类型较多而且比较复杂，本项目做了简�
 1. **dir_entry**
 
     dir_entry为文件名目录项，具体结构如下
+
     ```c
     struct dir_entry {
 	    unsigned short inode;  //i节点号
 	    char name[NAME_LEN];  //文件名，14字节
     };
     ```
+
     在打开一个文件时，文件系统会根据给定的文件名找到其i节点号，从而通过其对应i节点信息找到文件所在的磁盘块位置，如下图所示。
     例如对于要查找文件名/usr/bin的i节点号，文件系统首先会从具有固定i节点号（1）的根目录开始操作，即从i节点号1的数据块中查找到名称为usr的目录项，从而得到文件/usr的i节点号。
     根据该i节点号文件系统可以顺利地取得目录/usr，并在其中可以查找到文件名bin的目录项。这样也就知道了/usr/bin的i节点号，从而可以从磁盘上得到该i节点号的i节点结构信息。
@@ -170,6 +175,7 @@ linux0.11 中实现的文件类型较多而且比较复杂，本项目做了简�
 用于记录用户当前所处的目录的inode索引,根目录索引，打开的文件等信息。
 1. **FileManageMent**
     下面是FileManageMent的具体结构
+
     ```c
     struct FileManageMent
     {
@@ -201,67 +207,67 @@ linux0.11 中实现的文件类型较多而且比较复杂，本项目做了简�
 
    - ls 命令
 
-   ![image](./image/ls命令.png)
+   ![image](./image/GUI/ls命令.png)
 
    其中，绿色标识的文件是目录文件，白色标识的是普通文件。
 
    - cd 命令
 
-   ![image](./image/cd命令.png)
+   ![image](./image/GUI/cd命令.png)
    
    可以看到最左边的当前路径发生了改变，ls显示的目录为usr目录下的文件
 
    - stat 命令
 
-   ![image](./image/stat命令.png)
+   ![image](./image/GUI/stat命令.png)
 
    首先是输出出了include文件夹的信息，然后输出了const.h的信息，可以注意到const.h 的最后修改时间为1991年，正是当年linus编写linux的时间
 
    - cat 命令
 
-   ![image](./image/cat命令.png)
+   ![image](./image/GUI/cat命令.png)
 
    cat命令输出了const.h 的内容，可以看到const.h 主要定义了一些基本常量，如果对目录文件使用cat，则会输出目录的基本信息（相当于stat）
 
    - mkdir 命令
 
-   ![image](./image/mkdir命令.png)
+   ![image](./image/GUI/mkdir命令.png)
 
    让使用cd .. 我们返回根目录，试一试mkdir创建新的文件夹，然后stat 输出新创建的文件夹信息。
 
    - touch 命令
 
-   ![image](./image/touch命令.png)
+   ![image](./image/GUI/touch命令.png)
 
    使用touch命令创建新的文件，然后stat 输出新创建的文件信息。
 
    - vi 命令
 
-   ![image](./image/vi命令.png)
+   ![image](./image/GUI/vi命令.png)
 
    向新创建的文件写一点东西，然后cat命令输出刚刚写入的数据。
 
    - rmdir 命令
 
-   ![image](./image/rmdir命令.png)
+   ![image](./image/GUI/rmdir命令.png)
 
    删除文件夹oy，然而由于oy文件夹非空，所以系统给出错误信息，不能删除。
 
    - rm 命令
 
-   ![image](./image/rm命令.png)
+   ![image](./image/GUI/rm命令.png)
 
    先删除test.txt，再删除文件夹oy，成功删除。
 
    - sync 命令
 
-   ![image](./image/sync命令.png)
+   ![image](./image/GUI/sync命令.png)
 
    使用sync命令保存所有修改。
 
    - exit 命令
 
-   ![image](./image/exit命令.png)
+   ![image](./image/GUI/exit命令.png)
 
    使用exit命令退出系统。
 <!--
