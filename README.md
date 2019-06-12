@@ -14,8 +14,10 @@
 ## 项目概述
 
 本项目是基于MINIX1.0 的文件管理系统。主要借鉴了linux0.11的源码，去掉了linux0.11中的多进程，内存管理等模块，目标是能够真正的操作磁盘文件。
-/文件管理系统/ 目录下的hdc0.11.img 是一个MINIX文件格式的磁盘文件，能在ubuntu实际装载使用，下面是目录结构。
 基于c++的控制台，实现了linux的基本文件操作命令，包括ls，cd，mkdir，rm，vi等等命令，同时提供基本文件接口，包括sys_open,sys_close,sys_read,sys_write,sys_lseek等系统调用。
+**/文件管理系统/** 目录下的hdc0.11.img 是一个MINIX文件格式的磁盘文件，下面其在ubuntu装载的显示root目录结构。
+
+![image](./image/ubuntu.png)
 
 
 ## 开发/运行环境
