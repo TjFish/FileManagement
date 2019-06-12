@@ -78,6 +78,7 @@ int sys_close(unsigned int fd)
 		return (0);
 	iput(filp->f_inode);
 	delete filp;
+	fileSystem->filp[fd] = NULL;
 	return (0);
 }
 int sys_read(unsigned int fd, char * buf, int count) {
@@ -187,15 +188,12 @@ int cmd_ls()
 	struct dir_entry * de;
 	struct m_inode ** dir = &fileSystem->current;
 	entries = (*dir)->i_size / (sizeof(struct dir_entry));
-	if (entries <= 2)
-	{
-		pinfoc("该目录为空");
-		return 0;
-	}
+	
 	block = (*dir)->i_zone[0];
 	if (block <= 0) {
 		return -EPERM;
 	}
+	int count = 0;
 	bh = bread(block);
 	i = 0;
 	de = (struct dir_entry *) bh->b_data;
@@ -226,26 +224,45 @@ int cmd_ls()
 					pfilec(de->name);
 				printf("  ");
 			}
+			count++;
 			iput(inode);
 		}
 		de++;
 		i++;
 	}
 	brelse(bh);
+	if (count <= 0){
+		pinfoc("该目录为空");
+	}
 	cout << endl;
 }
 
 /*stat命令，显示文件详细信息*/
 int cmd_stat(string path)
 {
-	struct m_inode *inode = NULL;
-	inode = get_inode(path.c_str());
-	if (inode == NULL) {
+	const char * basename;
+	int namelen;
+	struct m_inode * dir, *inode;
+	struct buffer_head * bh, *dir_block;
+	struct dir_entry * de;
+	if (!(dir = dir_namei(path.c_str(), &namelen, &basename)))
+		return -ENOENT;
+	if (!namelen) {
+		iput(dir);
 		return -ENOENT;
 	}
-	char name[20];
-	get_name(inode, name, 20);
-	cout << "name: " <<string(name)<< endl;
+	bh = find_entry(&dir, basename, namelen, &de);
+	if (!bh) {
+		iput(dir);
+		return -ENOENT;
+	}
+	if (!(inode = iget(dir->i_dev, de->inode))) {
+		iput(dir);
+		brelse(bh);
+		return -EPERM;
+	}
+
+	cout << "name: " <<string(basename)<< endl;
 	cout <<"dev: "<<inode->i_dev << endl;
 	cout << "mode: " << GetFileMode(inode->i_mode) << endl;
 	cout << "nlinks: " << to_string(inode->i_nlinks) << endl;
@@ -314,7 +331,7 @@ int cmd_cat(string path) {
 	{
 		pinfoc("文件为空");
 	}
-	else if (inode->i_mode == S_IFREG)
+	else if (S_ISREG(inode->i_mode))
 	{
 		pinfoc("文件大小："+ GetFileSize(size));
 		printf("%s\n", buf);
@@ -353,6 +370,7 @@ int cmd_vi(string path)
 			return i;
 		}
 	psucc("\n添加成功");
+	sys_close(fd);
 	return 0;
 }
 
@@ -645,7 +663,7 @@ void myhint(int errorCode) {
 		perrorc( "路径指向的不是目录文件" );
 	}
 	else if (errorCode == -ENOTEMPTY) {
-		perrorc("文件非空");
+		perrorc("文件夹非空");
 	}
 	else if (errorCode == -EPERM) {
 		perrorc("系统内部问题");

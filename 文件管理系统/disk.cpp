@@ -119,8 +119,8 @@ void free_block(int dev, int block)
 		printf("trying to free block not in datazone");
 	/*首先查看内存中是否已经存在要清空的数据区，有则将该数据区作废*/
 	bh = get_hash_table(block);
-	bh->b_count++;
 	if (bh) {
+		bh->b_count++;
 		if (bh->b_count != 1) {
 			printf("WARING trying to free block (%04x:%d), count=%d\n",
 				dev, block, bh->b_count);
@@ -201,8 +201,9 @@ int brelse(buffer_head* bh) {
 	}
 	if (bh->b_dirt)
 	{
-		bwrite(bh->b_blocknr, bh->b_data);
-		bh->b_dirt = 0;
+		//先不写回,syncy一次性写回
+		//bwrite(bh->b_blocknr, bh->b_data);
+		//bh->b_dirt = 0;
 	}
 	bh->b_count--;
 	//暂且不考虑内存的释放

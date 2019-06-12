@@ -272,6 +272,7 @@ int get_name(struct m_inode * inode, char *buf,int size)
 		return 1;
 	}
 	/*获取父节点*/
+
 	struct m_inode * dir = get_father(inode);
 
 	/*从父节点查询*/
