@@ -15,7 +15,8 @@
 
 本项目是基于MINIX1.0 的文件管理系统。主要借鉴了linux0.11的源码，参考赵炯编编著的《linux内核完全注释》。去掉了linux0.11中的多进程，内存管理等模块，目标是能够真正的操作磁盘文件。
 基于c++的控制台，实现了linux的基本文件操作命令，包括ls，cd，mkdir，rm，vi等等命令，同时提供基本文件接口，包括sys_open,sys_close,sys_read,sys_write,sys_lseek等系统调用。
-**/文件管理系统/** 目录下的hdc0.11.img 是一个MINIX文件格式的磁盘文件，下面其在ubuntu装载的显示root目录结构。
+**/文件管理系统/hdc0.11.img** 是一个MINIX文件格式的磁盘文件，可以装载在ubuntu下，下面其在ubuntu装载的显示根目录结构。本项目所有的演示操作都是对hdc0.11.img进行的。
+（hdc0.11.img存储了linux0.11的所有源码以及相关开发工具）
 
 ![image](./image/ubuntu.png)
 
@@ -195,8 +196,8 @@ linux0.11 中实现的文件类型较多而且比较复杂，本项目做了简�
 
 ## GUI设计及使用说明
 
-整个文件管理系统包含ls，cd, stat, cat, mkdir, touch, vi, rmdir, rm, sync, exit十个命令。
-用户可以输入命令和参数实现文件管理。
+整个文件管理系统包含ls，cd, stat, cat, mkdir, touch, vi, rmdir, rm, sync, exit 十个命令。
+用户可以输入命令和参数实现文件管理，在操作后需要使用sync 命令进行保存，文件系统才会将所有修改保存到磁盘上。
 对于不同文件和信息，使用不同颜色输出（颜色文字代码文件为printc.h 来自github）
 
 ##GUI说明
@@ -270,6 +271,10 @@ linux0.11 中实现的文件类型较多而且比较复杂，本项目做了简�
    ![image](./image/GUI/exit命令.png)
 
    使用exit命令退出系统。
+
+##系统架构，文件组织
+    - to do
+
 <!--
 ## 设计细节
 
