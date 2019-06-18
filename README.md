@@ -1,4 +1,4 @@
-# FileManagement
+﻿# FileManagement
 # 文件管理系统实现
 
 操作系统 课程作业 3
@@ -272,149 +272,187 @@ linux0.11 中实现的文件类型较多而且比较复杂，本项目做了简�
 
    使用exit命令退出系统。
 
-##系统架构，文件组织
-    - to do
+## 具体实现
 
-<!--
-## 设计细节
+### 1. 系统架构和文件组织
 
-### 1. 系统架构
-
-在我的理解中，文件管理系统的作用是：**向下管理磁盘和文件，向上提供服务**。基于此，我设计了如下架构：
+根据我的理解，文件管理系统的作用是：**向下管理磁盘，向上提供文件视图服务**。基于此，我设计了如下架构：
 
 ![image](./image/文件管理系统架构.png)
 
-其中，**蓝色部分**为用户界面，是用户直接看到的图形化界面；**绿色部分**为文件管理系统向上对用户提供的功能，它们在用户界面中表现为一个个的按钮和鼠标键盘事件；**黄色部分**是文件管理系统向下对文件和磁盘进行管理的函数；**灰色部分**是虚拟磁盘，即管理的对象，文件也储存在这里面；**红色部分**处于真实的磁盘中，用于保存虚拟磁盘和文件管理系统的映像。
+其中，**用户界面**为用户看到的命令行窗口，是用户直接看到的图形化界面；**sys.c**为命令和系统调用层，是文件管理系统向上对用户提供的功能，它们在用户界面中表现为一个个的命令；**上层基础复用函数**是在底层结构的基础上，建立的文件系统的上层函数，包含目录查询，文件读写等抽象功能； **MINIX 1.0底层结构**是对MINIX 1.0 文件系统的实现，包含文件管理系统向下对磁盘文件进行管理的函数；**disk.c**磁盘读取层，包含对磁盘的读写，对真实磁盘进行操作。
 
-在这个结构中，用户一般是无法直接对虚拟磁盘进行操作的，除了格式化操作和退出系统操作（需要覆写原有磁盘映像）。这一方面简化了用户的操作，一方面提供了安全性保障，防止用户直接操作黄色部分函数，而损坏管理系统。
 
-### 2. 读取磁盘映像
+### 2. 用户界面
 
-当运行文件管理系统时，系统会进行初始化，尝试读取disk.img文件。如果文件不存在，会进入如下界面：
+这部分逻辑代码较为简单首先初始化读入磁盘，打印出基本磁盘信息，然后代码将进入while循环，等待用户输入命令，若用户输入命令有效则调用对应的命令函数，否则给出提示信息。若用户的磁盘损坏，或者文件格式不正确，将会给出错误信息。如果磁盘映像读取成功，文件管理系统便会根据映像中的内容恢复磁盘结构和文件内容。之后进入等待命令阶段
 
-![image](./image/没有磁盘.png)
+### 3. 命令和系统调用（sys.c)
 
-若此时不进行格式化，那么主界面上除了`关闭系统`按钮可以操作，其它功能都无法使用。
+这部分实现了10个基本命令和文件操作的系统调用。系统调用包括基本的文件打开，关闭，读，写，文件指针移动。基本命令是通过调用系统调用和底层函数实现的，下面举系统调用 最常用的文件打开 sys_open()为例
 
-如果磁盘映像读取成功，文件管理系统便会根据映像中的内容恢复磁盘结构和文件内容。磁盘映像并不是将磁盘中所有的内容都包含在内，它只包含了被占用的部分。
+```c
+int sys_open(string filename, int flag, int mode) {
+	struct m_inode * inode;
+	struct file * f;
+	int i, fd;
+    //查询空闲文件
+	for (fd = 0; fd < NR_OPEN; fd++)
+	{
+		if (!fileSystem->filp[fd])
+			break;
+	}
 
-### 3. 删除文件
+	if (fd >= NR_OPEN)
+		return -EINVAL;//打开文件达到上限，返回错误码
+    //创建新文件
+	f = fileSystem->filp[fd] = new file;
+    //open_file根据给出的文件信息，查询目录返回指定文件的inode节点，如果指定文件不存在，则在磁盘中创建它，然后返回inode节点，
+	if ((i = open_file(filename.c_str(),flag, mode, &inode)) < 0) {
+		fileSystem->filp[fd] = NULL;
+		delete f;
+		return i;
+	}
+	f->f_mode = mode;
+	f->f_flags = flag;
+	f->f_count = 1;
+	f->f_inode = inode;
+	f->f_pos = 0;
+    //返回文件编号
+	return (fd);
+}
+```
+sys_open首先检查该进程打开的文件数量是否超过上限，如果超过上限则返回错误码。之后内存中开辟新空间存储文件FCB，设定FCB的各项初始值后返回，其中文件的inode属性是通过调用open_file得到的。
 
-对于文件的删除分为2种：删除目录文件和非目录文件。
 
-删除目录文件时，必须递归地删除目录文件中所有的子文件，这里的子文件指目录文件下所有文件，即树型结构中的所有子孙。删除时，系统会根据inode中子文件的inode索引执行深度优先遍历，自底向上删除目录文件的所有子孙，最终删除目录文件本身。即：对于目录文件A，它包含两个文件B和C，那么当用户删除A时，系统首先删除B和C，再删除A；在删除B和C的过程中，如果B或C也是目录文件，那么就要以相同的方式删除B或C。
+### 4. 上层基础复用函数
 
-删除普通文件的过程比较简单，直接删除即可。
+这部分在底层结构的基础上，实现了一些基础复用函数，包括目录查询 find_entry()、新增目录 add_entry()、文件搜索dir_namei()、文件读写 filewrite(),fileread()、open_file,承接上文，以open_file讲解
 
-具体的删除过程会将inode位图的数据块位图中的相应信息置为true，即未占用；同时为了数据安全，这些inode和数据块中的信息都会被抹去，用0元素覆盖。
+```c
+int open_file(const char * pathname, int flag, int mode,
+	struct m_inode ** res_inode)
+{
+	const char * basename;
+	int inr, dev, namelen;
+	struct m_inode * dir, *inode;
+	struct buffer_head * bh;
+	struct dir_entry * de;
 
-我在代码中留下了测试删除顺序的方法，具体位置位于deleteFile(String fileName)函数中：
-
-```C#
-foreach (var index in deleteInode.dataBlockList)                     groupDescriptorList[0].blockBitmap[index] = true;  // 释放占用的数据块
-groupDescriptorList[0].inodeBitmap[deleteFileIndex] = true;  // 释放占用的inode块                  //MessageBox.Show(inodeList[deleteFileIndex].fileName, "", MessageBoxButtons.OK, MessageBoxIcon.Error);  // 检查删除顺序
-inodeList[currentInodeIndex].childInodeIndex.Remove(deleteFileIndex);
-//  抹去inode信息和数据块内容
-deleteInode.blockSize = 0;
+	if (!(dir = dir_namei(pathname, &namelen, &basename)))
+		return -ENOENT;
+	if (!namelen) {			/* special case: '/usr/' etc */
+		iput(dir);
+		return -EISDIR;
+	}
+	/*如果打开的文件不存在，则创建它*/
+	bh = find_entry(&dir, basename, namelen, &de);
+	if (!bh) {
+		inode = new_inode(dir->i_dev);
+		if (!inode) {
+			iput(dir);
+			return -ENOSPC;
+		}
+		inode->i_mode = mode;
+		inode->i_dirt = 1;
+		bh = add_entry(dir, basename, namelen, &de);
+		if (!bh) {
+			inode->i_nlinks--;
+			iput(inode);
+			iput(dir);
+			return -ENOSPC;
+		}
+		de->inode = inode->i_num;
+		bh->b_dirt = 1;
+		brelse(bh);
+		iput(dir);
+		*res_inode = inode;
+		return 0;
+	}
+	/*文件存在*/
+	inr = de->inode;
+	dev = dir->i_dev;
+	brelse(bh);
+	iput(dir);
+	if (!(inode = iget(dev, inr)))
+		return -EPERM;
+	if(S_ISDIR(inode->i_mode)&& flag!=O_RDONLY) {
+		iput(inode);
+		return -EACCES;
+	}
+	inode->i_atime = CurrentTime();
+	*res_inode = inode;
+	return 0;
+}
 ```
 
-将注释为检查删除顺序一行开头的注释符去掉，重新编译运行，执行删除操作即可观察到删除顺序。
+open_file首先查询目录，判断要打开的文件是否存在，如果不存在，则创建它。创建文件这里简略说下，首先创建文件的inode，然后将该inode加入到父级目录下，具体实现细节可以查看源码。经过上述操作，要打开的文件一定存在了，根据之前获得的i节点号调用iget()获取文件的inode，然后进行一些权限检查，比如目录文件只能以只读模式打开。最后返回文件的inode。
 
-### 4. Inode块和数据块分配
 
-1. Inode块分配
+### 4. MINIX1.0底层结构
 
-   当新建文件时，文件系统会从空闲的Inode块中选出一个分配给这个新文件，挑选过程使用Inode位图顺序检查每个Inode块是否已被分配，找到第一个空闲的Inode块后停止检查。如果所有的Inode块都已被占用，那么会返回错误。
+这部分根据MINIX文件系统的理论，实现了MINIX1.0文件系统，包括超级块读取，i节点位图，逻辑块位图管理，inode节点表管理，逻辑块管理。
+举一例最常用的iget()函数
 
-   ```c#
-   int indexOfInode = -1;
-   foreach(KeyValuePair<int, bool> kvp in groupDescriptorList[0].inodeBitmap)
-   {
-   	if(kvp.Value == true)
-       {
-   		indexOfInode = kvp.Key;
-           break;
-   	}
-   }
-   if (indexOfInode == -1)
-   	return false;
-              groupDescriptorList[0].inodeBitmap[indexOfInode] = false;
-   Inode inode = inodeList[indexOfInode];
-   ```
+```c
+struct m_inode *iget(int dev,int nr) 
+{
+	struct m_inode * inode;
+	/*首先查看inode是否已经在内存中*/
+	for (int i = 0; i < NR_INODE; ++i)
+	{
+		inode = inode_tabel[i];
+		if (inode->i_num == nr)
+		{
+            //引用计数加一，然后返回
+			inode->i_count++;
+			return inode;
+		}
+	}
+	inode = get_empty_inode();
+	inode->i_dev = dev;
+	inode->i_num = nr;
+	//从磁盘中读取
+	read_inode(inode);
+	inode->i_dirt = 0;
+	inode->i_count = 1;
+	inode->i_update = 1;
+	return inode;
+}
+```
 
-   最后一行代码中取出的inode将被写入各种信息，最终写回到Inode列表中。Inode位图中的信息也应得到更新，这个inode对应的位图标志被置为false。
+上层代码通过调用iget函数获取指定的inode节点。iget首先判断目标inode是否已经读入内存，如果读入内存，则将该inode的引用计数加一，然后返回该inode节点。否则，则从磁盘中读取inode。首先申请内存中的空闲inode，然后调用read_inode从磁盘读取。read_inode实际上是调用的bread()将inode所在磁盘块一次性读入，然后将目标inode返回。所有的inode内存空间都是由get_empty_inode创建出来的（inode的creator），并统一存储在inode_table数组中。这一切对上层代码都是透明的，上层代码只需调用iget()获取目标inode，使用完之后调用iput()释放inode，而无需关心inode的磁盘读取，空间管理。
 
-2. 数据块分配
 
-   文件创建之初是不会被分配数据块的，直到文件被写入了信息，才会被分配数据块。在这其中，对目录文件和普通文件的写入还有所不同。由于我规定文件名称不得超过100个字符，所以对于目录文件的一次写入最多会额外申请一个数据块；而普通文件的写入没有限制（C#本身的文本框字符上限为32768个，这是一个上限），所以可能会申请多个数据块。
+### 5. 磁盘读写
 
-   当然，对数据块的申请过程都是一致的：
+这部分实现了读写磁盘文件，以及内存中数据块的管理。为防止内存泄漏，所有的数据块空间均由该层管理。上层代码调用读数据块函数bread(),使用之后调用brelse()释放磁盘块,无需关心底层的磁盘读写。下面以bread()为例
 
-   ```c#
-   int indexOfBlock = -1;
-   foreach (KeyValuePair<int, bool> kvp in groupDescriptorList[0].blockBitmap)  // 找到一个空闲数据块
-   {
-       if (kvp.Value == true)
-       {
-       	indexOfBlock = kvp.Key;
-           break;
-   	}
-   }
-   if (indexOfBlock == -1)  // 没有足够的数据块
-   {
-   	updateInodeInfo(ref inode);
-       inodeList[commonIndex] = inode;
-       return false;
-   }
-                      groupDescriptorList[0].blockBitmap[indexOfBlock] = false;
-   DataBlock dataBlock = dataBlockList[indexOfBlock];
-   ```
+```c
+buffer_head* bh;
+	//从blocks查找看该block是否已经读入内存，存在则直接返回
+	if (bh = get_hash_table(block))
+	{
+		bh->b_count++;
+		return bh;
+	}
+	//向blocks申请内存中block
+	bh = getblk(block);
+	//从磁盘中读取
+	ifstream disk;
+	disk.open("hdc-0.11.img", ios::binary);
+	disk.seekg((block+1)*BLOCK_SIZE);
+	disk.read(bh->b_data, BLOCK_SIZE);
+	//cout << block<<"  Reading from the file"<< endl;
+	disk.close();
+	bh->b_uptodate = 1;
+	bh->b_dirt = 0;
+	bh->b_count = 1;
+	return bh;
+```
 
-   文件系统通过检查数据块位图取出相应的数据块，将位图中对应的信息置为false，在数据块被更新完毕后将其写回。
+你可能已经注意到，这部分代码与iget()十分类似，实际上他们就是原理相同。但需要注意的是，由于磁盘读写十分慢，故在内存中会保存大量的数据块。而对于大量的数据块采用顺序查找的速度是十分慢的，故blocks采用的是散列表，通过哈希函数加速block的查询。
 
-3. Inode块和数据块回收
+### 6. 其它信息
 
-   当文件被删除或内容被删减时，它占用的inode块和数据块可能会变得“空闲”，这时文件管理系统就必须将空闲的块进行回收，抹掉块中的内容，更新块位图中的信息。
-
-   删除文件时，会触发释放inode事件和数据块事件：
-
-   ```C#
-   foreach (var index in deleteInode.dataBlockList)
-   groupDescriptorList[0].blockBitmap[index] = true;  // 释放占用的数据块
-   groupDescriptorList[0].inodeBitmap[deleteFileIndex] = true;  // 释放占用的inode块
-   //MessageBox.Show(inodeList[deleteFileIndex].fileName, "", MessageBoxButtons.OK, MessageBoxIcon.Error);  // 检查删除顺序
-   inodeList[currentInodeIndex].childInodeIndex.Remove(deleteFileIndex);
-   //  抹去inode信息和数据块内容
-   deleteInode.blockSize = 0;
-   foreach(var index in deleteInode.dataBlockList)
-   {
-   	DataBlock dataBlock = dataBlockList[index];
-       for (int i = 0; i < BLOCKSIZE / 2; i++)
-       	dataBlock.data[i] = '\0';
-       dataBlockList[index] = dataBlock;
-   }
-   deleteInode.dataBlockList.Clear();
-   deleteInode.fatherIndex = -1;
-   deleteInode.fileSize = 0;
-   superBlock.freeInodeNum++;
-   inodeList[deleteFileIndex] = deleteInode;  // 写回
-   Inode fatherInode = inodeList[tempCurrentInodeIndex];
-   fatherInode.childrenNum--;
-   inodeList[tempCurrentInodeIndex] = fatherInode;  // 写回
-   writeDirectoryFileToDisk(tempCurrentInodeIndex);
-   ```
-
-   改写文件时，只可能会触发释放数据块事件：
-
-   ```C#
-   int freeIndex = inode.dataBlockList[blockNum];  // 要释放的数据块的index
-   groupDescriptorList[0].blockBitmap[freeIndex] = true;
-   for (int i = 0; i < BLOCKSIZE / 2; i++)
-   	dataBlockList[freeIndex].data[i] = '\0';
-   inode.dataBlockList.Remove(freeIndex);  // 从子列表中移除
-   ```
-
-### 5. 其它信息
-
-所有的代码都有必要的注释，读者可以参考注释阅读代码。
--->
+所有的代码关键处都有大量的注释，读者可以参考注释阅读代码。
