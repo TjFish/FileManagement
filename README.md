@@ -429,7 +429,11 @@ struct m_inode *iget(int dev,int nr)
 这部分实现了读写磁盘文件，以及内存中数据块的管理。为防止内存泄漏，所有的数据块空间均由该层管理。上层代码调用读数据块函数bread(),使用之后调用brelse()释放磁盘块,无需关心底层的磁盘读写。下面以bread()为例
 
 ```c
-buffer_head* bh;
+/*
+根据block编号获取已经在磁盘上存在的数据块 
+*/
+buffer_head* bread(int block) {
+	buffer_head* bh;
 	//从blocks查找看该block是否已经读入内存，存在则直接返回
 	if (bh = get_hash_table(block))
 	{
@@ -443,12 +447,12 @@ buffer_head* bh;
 	disk.open("hdc-0.11.img", ios::binary);
 	disk.seekg((block+1)*BLOCK_SIZE);
 	disk.read(bh->b_data, BLOCK_SIZE);
-	//cout << block<<"  Reading from the file"<< endl;
 	disk.close();
 	bh->b_uptodate = 1;
 	bh->b_dirt = 0;
 	bh->b_count = 1;
 	return bh;
+}
 ```
 
 你可能已经注意到，这部分代码与iget()十分类似，实际上他们就是原理相同。但需要注意的是，由于磁盘读写十分慢，故在内存中会保存大量的数据块。而对于大量的数据块采用顺序查找的速度是十分慢的，故blocks采用的是散列表，通过哈希函数加速block的查询。
